@@ -15,28 +15,17 @@ signal, sr = librosa.load(file_path, sr=22050)
 print("Sample rate:", sr)
 print("Audio duration:", len(signal) / sr)
 
-
-# Extract MFCCs
+# Extract 13 MFCC coefficients
 mfcc = librosa.feature.mfcc(
     y=signal,
     sr=sr,
     n_mfcc=13
 )
 
-# Calculate first-order delta coefficients
-delta = librosa.feature.delta(mfcc)
+print("MFCC shape:", mfcc.shape)
 
-# Calculate second-order delta coefficients
-delta2 = librosa.feature.delta(mfcc, order=2)
-
-# Extract mean and standard deviation
-features = np.concatenate([
-    np.mean(mfcc, axis=1),
-    np.std(mfcc, axis=1),
-    np.mean(delta, axis=1),
-    np.std(delta, axis=1)
-])
-
+# Average each coefficient across time
+features = np.mean(mfcc, axis=1)
 
 print("Feature vector shape:", features.shape)
 print("Feature vector:")
